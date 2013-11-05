@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+        id="com.mosalingua.plugins.IsAppInstalled"
+        version="1.0.0">
+
+    <name>IsAppInstalled</name>
+
+    <description>Check is packagename is installed</description>
+    <keywords>android,app,installed,package</keywords>
+    <license>MIT</license>
+
+    <author>Thibaut Durand github.com/tdurand</author>
+
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <platform name="android">
+
+        <config-file target="config.xml" parent="/*">
+		<feature name="IsAppInstalled">
+			<param name="android-package" value="com.mosalingua.plugins.IsAppInstalled"/>
+		</feature>
+        </config-file>
+
+        <js-module src="www/isAppInstalled.js" name="Share">
+            <clobbers target="plugins.isAppInstalled" />
+        </js-module>
+
+		<source-file src="src/android/IsAppInstalled.java" target-dir="src/com/mosalingua/plugins" />
+
+    </platform>
+
+</plugin>

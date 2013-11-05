@@ -7,38 +7,43 @@ package com.mosalingua.plugins;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Intent;
-import android.util.Log;
-import android.net.Uri;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 public class IsAppInstalled extends CordovaPlugin {
-	
-	@Override
+    
+    @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
         if ("isappinstalled".equals(action)) {
-            boolean isAppInstalled = this.isPackageExisted(args.getString(0));
-            if(isAppInstalled) {
-                callbackContext.success(true);
+            boolean isAppInstalled;
+            try {
+                isAppInstalled = this.isPackageInstalled(args.getString(0), cordova.getActivity().getApplicationContext());
+                if(isAppInstalled) {
+                    callbackContext.success("true");
+                }
+                else {
+                    callbackContext.success("false");
+                }
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return false;
             }
-            else {
-                callbackContext.success(false);
-            }
+            
         }
         return false;  // Returning false results in a "MethodNotFound" error.
     }
 
-    public boolean isPackageExisted(String targetPackage){
-       PackageManager pm = getPackageManager();
-       try {
-        PackageInfo info = pm.getPackageInfo(targetPackage,PackageManager.GET_META_DATA);
-           } catch (NameNotFoundException e) {
-        return false;
-        }  
-        return true;
+    private boolean isPackageInstalled(String packagename, Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (NameNotFoundException e) {
+            return false;
+        }
     }
 }
